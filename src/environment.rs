@@ -66,7 +66,8 @@ impl Environment {
         white_engine: &mut UsiEngine,
         reporter: Arc<Mutex<dyn Reporter + Send>>,
     ) -> Result<GameResult, Error> {
-        let mut game = Game::new(config.time.to_time_control());
+        let t = config.time.to_time_control();
+        let mut game = if config.mini { Game::new_mini(t) } else { Game::new(t) };
         game.black_player = black_engine.name.to_string();
         game.white_player = white_engine.name.to_string();
         let def_sfen = if config.mini { MINI_SFEN } else { DEFAULT_SFEN };

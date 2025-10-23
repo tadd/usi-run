@@ -40,4 +40,11 @@ impl Game {
             turn_start_time: Instant::now(),
         }
     }
+
+    pub fn new_mini(initial_time: TimeControl) -> Game {
+        let mut g = Self::new(initial_time);
+        drop(g.pos);
+        g.pos = Position::new_mini();
+        g
+    }
 }
