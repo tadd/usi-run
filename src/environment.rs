@@ -12,6 +12,7 @@ use crate::stats::MatchStatistics;
 
 const DEFAULT_SFEN: &str = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - \
                                     1";
+const MINI_SFEN: &str = "rbsgk/4p/5/P4/KGSBR b - 1";
 
 #[derive(Debug)]
 pub enum Action {
@@ -68,8 +69,9 @@ impl Environment {
         let mut game = Game::new(config.time.to_time_control());
         game.black_player = black_engine.name.to_string();
         game.white_player = white_engine.name.to_string();
+        let def_sfen = if config.mini { MINI_SFEN } else { DEFAULT_SFEN };
         game.pos
-            .set_sfen(config.initial_pos.as_ref().map_or(DEFAULT_SFEN, |v| v))?;
+            .set_sfen(config.initial_pos.as_ref().map_or(def_sfen, |v| v))?;
 
         let mut black_write_hook = Some(create_write_hook(Color::Black, reporter.clone()));
         let mut white_write_hook = Some(create_write_hook(Color::Black, reporter.clone()));

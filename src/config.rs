@@ -111,6 +111,7 @@ impl Default for TimeControlConfig {
 
 #[derive(Debug)]
 pub struct MatchConfig {
+    pub mini: bool,
     pub num_games: u32,
     pub max_ply: Option<u16>,
     pub initial_pos: Option<String>,
@@ -128,6 +129,10 @@ impl MatchConfig {
 
         let value = buf.parse::<Value>().unwrap();
 
+        self.mini = value
+            .get("mini")
+            .and_then(|v| v.as_bool())
+            .map(|v| v as bool).unwrap_or(false);
         self.num_games = value
             .get("num_games")
             .and_then(|v| v.as_integer())
@@ -163,6 +168,7 @@ impl Default for MatchConfig {
         // Default values are derived from the rules of WCSC26.
         // http://www.computer-shogi.org/wcsc26/
         MatchConfig {
+            mini: false,
             num_games: 1,
             max_ply: Some(256),
             initial_pos: None,
